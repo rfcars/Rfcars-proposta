@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFCARS — Pedido de Proposta</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080808;color:#fff;font-family:Arial,Helvetica,sans-serif}
+.container{max-width:620px;margin:auto;padding:28px 18px 40px}
+.card{background:#111;border:1px solid #333;border-radius:18px;padding:28px;box-shadow:0 10px 35px #000}
+.logo{font-size:34px;font-weight:800;letter-spacing:5px;text-align:center;margin-bottom:6px}
+.gold{color:#d6a84b}
+.subtitle{text-align:center;color:#bbb;margin:0 0 28px;font-size:15px}
+h1{font-size:25px;text-align:center;margin:0 0 10px}
+label{display:block;margin:17px 0 7px;font-weight:700;font-size:14px}
+input,select,textarea{width:100%;padding:14px;border-radius:10px;border:1px solid #444;background:#1b1b1b;color:#fff;font-size:16px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#d6a84b}
+textarea{min-height:110px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{width:100%;margin-top:25px;padding:16px;border:0;border-radius:11px;background:#d6a84b;color:#080808;font-size:17px;font-weight:800;cursor:pointer}
+.note{font-size:12px;color:#999;line-height:1.5;margin-top:15px}
+.success{display:none;text-align:center;padding:30px 10px}
+.success h2{color:#d6a84b}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.card{padding:21px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <div class="logo">RF<span class="gold">CARS</span></div>
+    <h1>Pedido de Proposta</h1>
+    <p class="subtitle">Diga-nos o que procura e encontraremos as melhores opções para si.</p>
+
+    <form id="leadForm">
+      <label>Nome *</label>
+      <input id="nome" required placeholder="O seu nome">
+
+      <label>Email *</label>
+      <input id="email" type="email" required placeholder="O seu email">
+
+      <label>Telemóvel *</label>
+      <input id="telefone" type="tel" required placeholder="+351 XXX XXX XXX">
+
+      <label>Como nos conheceu?</label>
+      <select id="origem">
+        <option value="">Selecione</option>
+        <option>Instagram</option>
+        <option>Facebook</option>
+        <option>Google</option>
+        <option>Recomendação</option>
+        <option>Stand / Parceiro</option>
+        <option>Outro</option>
+      </select>
+
+      <label>Marca *</label>
+      <select id="marca" required>
+        <option value="">Selecione</option>
+        <option>Audi</option><option>BMW</option><option>Mercedes-Benz</option>
+        <option>Porsche</option><option>Volkswagen</option><option>Volvo</option>
+        <option>Tesla</option><option>Outra</option>
+      </select>
+
+      <label>Modelo *</label>
+      <input id="modelo" required placeholder="Ex.: Q4 e-tron">
+
+      <div class="grid">
+        <div>
+          <label>Ano desde</label>
+          <input id="ano" type="number" min="1990" max="2030" placeholder="2021">
+        </div>
+        <div>
+          <label>Quilometragem até</label>
+          <input id="kms" type="number" min="0" placeholder="100000">
+        </div>
+      </div>
+
+      <label>Preço final até *</label>
+      <input id="preco" required type="number" min="0" placeholder="35000">
+      <div class="note">Indique o valor máximo que pretende gastar com a viatura entregue e legalizada em Portugal.</div>
+
+      <label>Outras características / Mensagem</label>
+      <textarea id="mensagem" placeholder="Cor, combustível, equipamento, motorização ou outros requisitos..."></textarea>
+
+      <button type="submit">🚗 PEDIR PROPOSTA</button>
+      <div class="note">
+        Ao enviar, será aberta uma conversa no WhatsApp da RFCARS com os dados do pedido.
+      </div>
+    </form>
+
+    <div class="success" id="success">
+      <h2>Pedido preparado! ✓</h2>
+      <p>A conversa do WhatsApp foi aberta com os dados da sua proposta.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// SUBSTITUI O NÚMERO ABAIXO PELO WHATSAPP DA RFCARS,
+// SEM +, ESPAÇOS OU TRAÇOS. Exemplo: 351912345678
+const WHATSAPP = "351918807108";
+
+document.getElementById("leadForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const v = id => document.getElementById(id).value.trim();
+
+  const texto =
+`🚗 *NOVO PEDIDO DE PROPOSTA — RFCARS*
+
+*Nome:* ${v("nome")}
+*Email:* ${v("email")}
+*Telemóvel:* ${v("telefone")}
+*Como nos conheceu:* ${v("origem") || "Não indicado"}
+
+*Marca:* ${v("marca")}
+*Modelo:* ${v("modelo")}
+*Ano desde:* ${v("ano") || "Não indicado"}
+*Quilometragem até:* ${v("kms") ? Number(v("kms")).toLocaleString("pt-PT") + " km" : "Não indicada"}
+*Preço final até:* ${v("preco") ? Number(v("preco")).toLocaleString("pt-PT") + " €" : "Não indicado"}
+
+*Outras características / mensagem:*
+${v("mensagem") || "Não indicada"}`;
+
+  if (WHATSAPP.includes("X")) {
+    alert("Antes de publicar o formulário, substitua o número WHATSAPP no código pelo número da RFCARS.");
+    return;
+  }
+
+  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(texto), "_blank");
+  document.getElementById("leadForm").style.display = "none";
+  document.getElementById("success").style.display = "block";
+});
+</script>
+</body>
+</html>
